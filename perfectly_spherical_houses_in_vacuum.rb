@@ -1,4 +1,3 @@
-
 # Define a method returns the coordinated of Sant's new position on the grid after moving the sleigh in a given direction
 def move_sleigh(initial_coordinates, direction)
   case direction
@@ -25,13 +24,13 @@ initial_coordinates = x0, y0
 visited_houses[x0][y0] += 1
 
 # Import file containing directions for Santa
-directions_file = './test.txt'
+directions_file = './input.txt'
 # Open the file and process each direction
 File.open(directions_file, 'r') do |file|
+  puts '🛷 Assuming perfect spherical houses in a vacuum...'
   # Assign the first character of the file to the direction variable
   direction = file.getc
-
-  while !direction.eql? "\n"
+  while ['^', 'v', '>', '<'].include? direction
     # Move the sleigh and get new coordinates
     new_coordinates = move_sleigh(initial_coordinates, direction)
     # Mark the new house as visited
@@ -46,4 +45,4 @@ end
 # Count the number of houses that received at least one present
 houses_with_present = visited_houses.values.sum(&:length)
 
-puts "#{houses_with_present} houses received at least one present from Santa."
+puts "🎁☃️    #{houses_with_present} houses received at least one present from Santa!    🎁☃️"
