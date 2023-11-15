@@ -1,32 +1,49 @@
-# OBJECTIVE: How many houses receive at least one present?  --> i.e. on the total of houses (sites = steps) how many he visits?
-# PATTERNS:
-# 1. '>' delivers presents to 2 houses: one at the starting location, and one to the east
-# 2. '^>v<' delivers presents to 4 houses in a square, including twice to the house at his starting/ending location.
-# 3. '^v^v^v^v^v' delivers many presents at only 2 houses
 
-# generate the infinite 2D grid. Since you can't create and infinte object with a finite piece of memory, you can either create a very big one hoping that the size will be enough, or just create pacman border conditions (i.e. I am folding the 2D grid plane into a sphere and i'm moving on the surface of the sphere). That is, grid [0][0] = grid[MAX_SIZE][MAX_SIZE] etc in all the 4 directions.
+# Define a method returns the coordinated of Sant's new position on the grid after moving the sleigh in a given direction
+def move_sleigh(initial_coordinates, direction)
+  case direction
 
-# what is MAX_SIZE?
+  when '^' then initial_coordinates.zip([0,1]).map {  |a, b| a + b }
+  when 'v' then initial_coordinates.zip([0,-1]).map {  |a, b| a + b }
+  when '>' then initial_coordinates.zip([1,0]).map {  |a, b| a + b }
+  else initial_coordinates.zip([-1,0]).map {  |a, b| a + b }
+  end
 
-# populate the grid with 0 and increase site by 1 whenever santa visits the site.
+end
 
-# He begins by delivering a present to the house at his starting location
-# start at grid[0][0] and make the site go from 0 -> 1
+# Santa moves on an infite 2D grid, with origin at his starting point (x0, y0).
+# In this program I am not representing the grid, but just the coordinates of the houses visited by Santa.
+# The hash has the following structure: visited_houses = {x1: {y1: value, y2: value}, x2: {y1: value, y2: value}}
 
-# Moves are always exactly one house to the north (^), south (v), east (>), or west (<)
-# After each move, he delivers a present to the house at his new location
-# follow moves on the file and increase the site's number accordingly.
+# Create a hash to keep track of visited houses
+visited_houses = Hash.new { |hash, key| hash[key]  = Hash.new(0) }
 
-# count sites where > 1
-# ---------------------------------------------------------------------------------
-# Alternative solution (less computationally demanding)
+# Initial coordinates for Santa
+(x0,y0) = 0, 0
+initial_coordinates = x0, y0
+# Mark the starting house as visited
+visited_houses[x0][y0] += 1
 
-# read file char by char
+# Import file containing directions for Santa
+directions_file = './test.txt'
+# Open the file and process each direction
+File.open(directions_file, 'r') do |file|
+  # Assign the first character of the file to the direction variable
+  direction = file.getc
 
-# recognize the patterns as they come into the file
+  while !direction.eql? "\n"
+    # Move the sleigh and get new coordinates
+    new_coordinates = move_sleigh(initial_coordinates, direction)
+    # Mark the new house as visited
+    visited_houses[new_coordinates[0]][new_coordinates[1]] += 1
+    # Update the initial coordinates for the next move
+    initial_coordinates = new_coordinates
+    # Read the next direction from the file
+    direction = file.getc
+  end
+end
 
-# assign to each pattern a number of houses visited
+# Count the number of houses that received at least one present
+houses_with_present = visited_houses.values.sum(&:length)
 
-# return total number of houses visited
-
-# add +1 at the end for the initial house
+puts "#{houses_with_present} houses received at least one present from Santa."
