@@ -27,7 +27,7 @@ visited_houses[x0][y0] += 1
 directions_file = './input.txt'
 # Open the file and process each direction
 File.open(directions_file, 'r') do |file|
-  puts '🛷 Flying around the world...'
+  puts '🛷 Assuming perfect spherical houses in a vacuum...'
   # Assign the first character of the file to the direction variable
   direction = file.getc
   while ['^', 'v', '>', '<'].include? direction
