@@ -14,7 +14,7 @@ This festive Ruby script simulates Santa's journey through a 2D grid, delivering
    ```
 
 3. **Enjoy the Ride:**
-   Watch as Santa moves through the grid, delivering presents to houses.
+   Guess how many houses get at least one gift.
   
 
 ## Requirements 📋
